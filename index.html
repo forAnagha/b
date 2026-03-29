@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>For Anagha ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --rose: #c9a0a0;
+    --rose-bright: #e8b4b8;
+    --rose-deep: #a0707a;
+    --black: #050505;
+    --muted: rgba(201,160,160,0.35);
+    --text: rgba(255,245,245,0.9);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.55;
+  }
+
+  /* cinematic bars */
+  .bar-top, .bar-bottom {
+    position: fixed; left: 0; right: 0;
+    height: 44px; background: var(--black);
+    z-index: 800; pointer-events: none;
+  }
+  .bar-top { top: 0; }
+  .bar-bottom { bottom: 0; }
+
+  /* ══════════════ INTRO ══════════════ */
+  #intro {
+    position: fixed; inset: 0;
+    background: var(--black);
+    z-index: 5000;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 32px;
+    transition: opacity 1.4s ease, visibility 1.4s;
+  }
+  #intro.hidden { opacity: 0; visibility: hidden; }
+
+  .intro-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.45em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .intro-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(64px, 20vw, 100px);
+    line-height: 0.9;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .intro-name em { font-style: italic; color: var(--rose-bright); display: block; }
+
+  .intro-line {
+    width: 1px; height: 0;
+    background: var(--muted);
+    margin: 36px auto;
+    transition: height 1.2s ease 0.4s;
+  }
+  .intro-line.grow { height: 56px; }
+
+  #tap-area {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 18px;
+    user-select: none;
+  }
+
+  .tap-ring {
+    position: relative;
+    width: 80px; height: 80px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tap-border {
+    position: absolute; inset: 0;
+    border: 1px solid var(--muted);
+    border-radius: 50%;
+  }
+  .tap-arc {
+    position: absolute;
+    top: -6px; left: -6px;
+    width: 92px; height: 92px;
+  }
+  .arc-bg  { fill: none; stroke: rgba(201,160,160,0.1); stroke-width: 1.5; }
+  .arc-fill {
+    fill: none; stroke: var(--rose-bright); stroke-width: 1.5;
+    stroke-dasharray: 270; stroke-dashoffset: 270;
+    stroke-linecap: round;
+    transform-origin: center; transform: rotate(-90deg);
+    transition: stroke-dashoffset 0.5s ease;
+  }
+  .tap-inner {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(160,112,122,0.5), transparent 70%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    transition: transform 0.15s;
+    position: relative; z-index: 2;
+  }
+  .tap-ring:active .tap-inner { transform: scale(0.86); }
+
+  .tap-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px; letter-spacing: 0.35em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .tap-message {
+    font-family: 'EB Garamond', serif;
+    font-style: italic; font-size: 18px;
+    color: var(--rose); min-height: 24px;
+    text-align: center;
+  }
+
+  /* ══════════════ MAIN ══════════════ */
+  #main { opacity: 0; transition: opacity 1.5s ease; }
+  #main.visible { opacity: 1; }
+
+  /* opener */
+  .section-opener {
+    min-height: 100svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 32px 100px;
+    position: relative;
+  }
+  .section-opener::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+  }
+
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 9px; letter-spacing: 0.5em;
+    color: var(--rose-deep); text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
+  }
+  .hero-title {
+    font-weight: 300;
+    font-size: clamp(52px, 16vw, 90px);
+    line-height: 0.95; margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 1.2s ease 0.6s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--rose-bright); display: block; }
+  .hero-sub {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: clamp(17px, 4.5vw, 22px);
+    color: rgba(255,245,245,0.45); line-height: 1.65;
+    max-width: 320px;
+    opacity: 0; animation: fadeUp 1.2s ease 0.9s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 70px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 1s ease 2.2s forwards;
+  }
+  .scroll-hint span {
+    font-family: 'Cinzel', serif;
+    font-size: 8px; letter-spacing: 0.4em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .scroll-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--rose); animation: blink 2s infinite;
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+  @keyframes blink  { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+  /* section label */
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px; letter-spacing: 0.5em;
+    color: var(--rose-deep); text-transform: uppercase;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 48px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--muted), transparent);
+  }
+
+  /* letter */
+  .section-letter {
+    padding: 100px 28px 80px;
+    max-width: 640px; margin: 0 auto;
+  }
+  #letter-text {
+    font-size: clamp(19px, 5vw, 28px);
+    font-weight: 300; line-height: 1.95;
+    color: var(--text);
+  }
+  #letter-text .line { display: block; }
+  #type-cursor {
+    display: inline-block;
+    width: 1.5px; height: 1em;
+    background: var(--rose-bright);
+    margin-left: 2px; vertical-align: middle;
+    animation: blink 0.85s infinite;
+  }
+  .letter-sig {
+    margin-top: 52px;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: clamp(20px, 5.5vw, 30px);
+    color: var(--rose-bright);
+    opacity: 0; transition: opacity 1.5s ease;
+  }
+  .letter-sig.show { opacity: 1; }
+
+  /* divider */
+  .divider {
+    display: flex; align-items: center; gap: 20px;
+    padding: 0 28px; max-width: 640px; margin: 0 auto 60px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--muted), transparent);
+  }
+  .divider span { color: var(--rose); font-size: 12px; }
+
+  /* gallery */
+  .section-gallery { padding: 40px 0 120px; }
+  .gallery-header { text-align: center; padding: 0 28px; margin-bottom: 48px; }
+  .gallery-header h2 {
+    font-size: clamp(38px, 12vw, 68px);
+    font-weight: 300; line-height: 1;
+  }
+  .gallery-header h2 em { font-style: italic; color: var(--rose-bright); }
+
+  .gallery-strip {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 0 16px;
+  }
+  .gallery-row { display: flex; gap: 4px; }
+
+  .gallery-item {
+    position: relative; overflow: hidden;
+    border-radius: 2px; background: #111;
+    flex: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: brightness(0.75) saturate(0.6);
+    transition: filter 0.7s ease, transform 0.8s ease;
+  }
+  .gallery-item.revealed img {
+    filter: brightness(1) saturate(1);
+    transform: scale(1.04);
+  }
+
+  /* aspect ratios */
+  .ratio-cinema  { aspect-ratio: 16/9; }
+  .ratio-portrait{ aspect-ratio: 3/4; }
+  .ratio-square  { aspect-ratio: 1/1; }
+  .ratio-wide    { aspect-ratio: 3/2; }
+
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(5,5,5,0.9) 0%, transparent 55%);
+    display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 16px;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  .gallery-item.revealed .gallery-overlay { opacity: 1; }
+
+  .gallery-caption {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: clamp(13px, 3.8vw, 18px);
+    color: var(--rose-bright); line-height: 1.4;
+    transform: translateY(8px);
+    transition: transform 0.6s ease;
+  }
+  .gallery-item.revealed .gallery-caption { transform: none; }
+
+  /* tap hint ring */
+  .gallery-tap-hint {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 1; transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .gallery-item.revealed .gallery-tap-hint { opacity: 0; }
+  .hint-ring {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(232,180,184,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--rose-bright);
+  }
+
+  /* placeholder */
+  .photo-ph {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px;
+    color: rgba(201,160,160,0.2);
+    font-family: 'Cinzel', serif;
+    font-size: 9px; letter-spacing: 0.2em;
+  }
+  .ph-icon { font-size: 22px; opacity: 0.3; }
+
+  .gallery-note {
+    font-family: 'Cinzel', serif; font-size: 9px;
+    letter-spacing: 0.3em; color: var(--muted);
+    text-align: center; padding: 0 28px;
+    margin-bottom: 32px; text-transform: uppercase;
+    line-height: 1.9;
+  }
+
+  /* closing */
+  .section-close { text-align: center; padding: 80px 28px 120px; }
+  .close-quote {
+    font-weight: 300; font-style: italic;
+    font-size: clamp(26px, 7.5vw, 56px);
+    line-height: 1.2; max-width: 560px;
+    margin: 0 auto 40px;
+    color: var(--text); position: relative;
+  }
+  .close-quote::before {
+    content: '\201C';
+    position: absolute; top: -28px; left: -8px;
+    font-size: 80px; color: var(--muted);
+    font-style: normal; line-height: 1;
+  }
+  .close-name {
+    font-family: 'Cinzel', serif;
+    font-size: 10px; letter-spacing: 0.5em;
+    color: var(--rose-deep); text-transform: uppercase;
+  }
+
+  /* music button */
+  #music-btn {
+    position: fixed; top: 12px; right: 16px;
+    z-index: 900;
+    background: rgba(5,5,5,0.75);
+    border: 1px solid var(--muted); border-radius: 50%;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; color: var(--rose);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    backdrop-filter: blur(8px);
+  }
+
+  /* petals */
+  .petal {
+    position: fixed; bottom: -30px;
+    pointer-events: none;
+    animation: floatUp linear infinite;
+    opacity: 0; z-index: 7000;
+  }
+  @keyframes floatUp {
+    0%  { transform: translateY(0) rotate(0deg); opacity: 0; }
+    8%  { opacity: 0.55; }
+    92% { opacity: 0.3; }
+    100%{ transform: translateY(-110vh) rotate(540deg); opacity: 0; }
+  }
+
+  /* touch ripple */
+  .ripple {
+    position: fixed; border-radius: 50%;
+    border: 1px solid var(--rose);
+    pointer-events: none; z-index: 8900;
+    transform: translate(-50%, -50%);
+    animation: rippleOut 0.9s ease forwards;
+  }
+  @keyframes rippleOut {
+    from { width: 0; height: 0; opacity: 0.7; }
+    to   { width: 100px; height: 100px; opacity: 0; }
+  }
+
+  /* scroll reveal */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 1.1s ease, transform 1.1s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-d1 { transition-delay: 0.15s; }
+  .reveal-d2 { transition-delay: 0.3s; }
+
+  /* desktop upgrade */
+  @media (min-width: 768px) {
+    body { cursor: none; }
+    .gallery-strip { padding: 0 32px; max-width: 900px; margin: 0 auto; }
+    .gallery-item img { filter: grayscale(20%) brightness(0.82); }
+    .gallery-item:hover img { filter: none; transform: scale(1.04); }
+    .gallery-tap-hint { display: none; }
+    .gallery-item .gallery-overlay { opacity: 0; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-item:hover .gallery-caption { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar-top"></div>
+<div class="bar-bottom"></div>
+<button id="music-btn">♪</button>
+
+<audio id="bgMusic" loop>
+  <source src="music1.mpeg" type="audio/mpeg">
+</audio>
+
+<!-- ══ INTRO ══ -->
+<div id="intro">
+  <p class="intro-eyebrow">A letter &amp; gallery for</p>
+  <h1 class="intro-name">Ana<em>gha</em></h1>
+  <div class="intro-line" id="intro-line"></div>
+  <div id="tap-area">
+    <div class="tap-ring" id="tap-ring">
+      <div class="tap-border"></div>
+      <svg class="tap-arc" viewBox="0 0 92 92">
+        <circle class="arc-bg"  cx="46" cy="46" r="43"/>
+        <circle class="arc-fill" id="arc-fill" cx="46" cy="46" r="43"/>
+      </svg>
+      <div class="tap-inner">❤️</div>
+    </div>
+    <p class="tap-label">Tap to begin</p>
+    <p class="tap-message" id="tap-msg">&nbsp;</p>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div id="main">
+
+  <section class="section-opener">
+    <p class="eyebrow">For Anagha — with love</p>
+    <h1 class="hero-title">You are<em>my favorite.</em></h1>
+    <p class="hero-sub">Some people change everything without even trying. You did that.</p>
+    <div class="scroll-hint"><span>Scroll</span><div class="scroll-dot"></div></div>
+  </section>
+
+  <section class="section-letter">
+    <p class="section-label reveal">The Letter</p>
+    <div id="letter-text" class="reveal reveal-d1"></div>
+    <p class="letter-sig" id="letter-sig">— Yours, always ❤️</p>
+  </section>
+
+  <div class="divider reveal"><span>✦</span></div>
+
+  <section class="section-gallery">
+    <div class="gallery-header">
+      <p class="eyebrow reveal" style="margin-bottom:14px">A few frames of</p>
+      <h2 class="reveal reveal-d1">My favourite<em>person</em></h2>
+    </div>
+
+    <p class="gallery-note reveal">Tap each photo to reveal ✦ Replace photo1.jpg – photo6.jpg with your own</p>
+
+    <div class="gallery-strip">
+
+      <!-- Row 1: full cinema -->
+      <div class="gallery-row reveal">
+        <div class="gallery-item ratio-cinema">
+          <img src="photo1.jpg" alt="" onerror="this.style.display='none'">
+          <div class="photo-ph"><span class="ph-icon">🌸</span><span>photo1.jpg</span></div>
+          <div class="gallery-overlay"><p class="gallery-caption">Your smile is my favourite view in the world.</p></div>
+          <div class="gallery-tap-hint"><div class="hint-ring">✦</div></div>
+        </div>
+      </div>
+
+      <!-- Row 2: portrait + portrait -->
+      <div class="gallery-row reveal reveal-d1">
+        <div class="gallery-item ratio-portrait">
+          <img src="photo2.jpg" alt="" onerror="this.style.display='none'">
+          <div class="photo-ph"><span class="ph-icon">🌸</span><span>photo2.jpg</span></div>
+          <div class="gallery-overlay"><p class="gallery-caption">Your eyes hold more warmth than the sun.</p></div>
+          <div class="gallery-tap-hint"><div class="hint-ring">✦</div></div>
+        </div>
+        <div class="gallery-item ratio-portrait">
+          <img src="photo3.jpg" alt="" onerror="this.style.display='none'">
+          <div class="photo-ph"><span class="ph-icon">🌸</span><span>photo3.jpg</span></div>
+          <div class="gallery-overlay"><p class="gallery-caption">Kind beyond measure.</p></div>
+          <div class="gallery-tap-hint"><div class="hint-ring">✦</div></div>
+        </div>
+      </div>
+
+      <!-- Row 3: wide -->
+      <div class="gallery-row reveal reveal-d2">
+        <div class="gallery-item ratio-wide">
+          <img src="photo4.jpg" alt="" onerror="this.style.display='none'">
+          <div class="photo-ph"><span class="ph-icon">🌸</span><span>photo4.jpg</span></div>
+          <div class="gallery-overlay"><p class="gallery-caption">Cool in every sense of the word. 😎</p></div>
+          <div class="gallery-tap-hint"><div class="hint-ring">✦</div></div>
+        </div>
+      </div>
+
+      <!-- Row 4: square + square -->
+      <div class="gallery-row reveal reveal-d1">
+        <div class="gallery-item ratio-square">
+          <img src="photo5.jpg" alt="" onerror="this.style.display='none'">
+          <div class="photo-ph"><span class="ph-icon">🌸</span><span>photo5.jpg</span></div>
+          <div class="gallery-overlay"><p class="gallery-caption">Stronger than she knows.</p></div>
+          <div class="gallery-tap-hint"><div class="hint-ring">✦</div></div>
+        </div>
+        <div class="gallery-item ratio-square">
+          <img src="photo6.jpg" alt="" onerror="this.style.display='none'">
+          <div class="photo-ph"><span class="ph-icon">🌸</span><span>photo6.jpg</span></div>
+          <div class="gallery-overlay"><p class="gallery-caption">You make every moment feel lighter.</p></div>
+          <div class="gallery-tap-hint"><div class="hint-ring">✦</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section-close">
+    <div class="divider reveal" style="margin-bottom:70px"><span>✦</span></div>
+    <blockquote class="close-quote reveal">
+      I love you, Anagha. Not just for who you are… but for who I become around you.
+    </blockquote>
+    <p class="close-name reveal reveal-d1">❤️ Always yours</p>
+  </section>
+
+</div>
+
+<script>
+/* DESKTOP CURSOR */
+const isMobile = 'ontouchstart' in window;
+if (!isMobile) {
+  const cur  = document.createElement('div');
+  const ring = document.createElement('div');
+  cur.style.cssText  = 'position:fixed;width:10px;height:10px;background:var(--rose-bright);border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:screen;';
+  ring.style.cssText = 'position:fixed;width:34px;height:34px;border:1px solid var(--muted);border-radius:50%;pointer-events:none;z-index:9998;transition:left 0.35s ease,top 0.35s ease;';
+  document.body.append(cur, ring);
+  document.addEventListener('mousemove', e => {
+    cur.style.left  = e.clientX - 5 + 'px';
+    cur.style.top   = e.clientY - 5 + 'px';
+    ring.style.left = e.clientX - 17 + 'px';
+    ring.style.top  = e.clientY - 17 + 'px';
+  });
+}
+
+/* MUSIC */
+const music    = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('music-btn');
+const saved    = sessionStorage.getItem('musicTime');
+if (saved) music.currentTime = parseFloat(saved);
+
+function tryPlay() {
+  music.volume = 0;
+  return music.play().then(() => {
+    let v = 0;
+    const t = setInterval(() => {
+      v = Math.min(v + 0.04, 1); music.volume = v;
+      if (v >= 1) clearInterval(t);
+    }, 80);
+  }).catch(() => {});
+}
+musicBtn.addEventListener('click', () => {
+  if (music.paused) { tryPlay(); musicBtn.textContent = '♪'; }
+  else { music.pause(); musicBtn.textContent = '♩'; }
+});
+setInterval(() => { if (!music.paused) sessionStorage.setItem('musicTime', music.currentTime); }, 1000);
+
+/* INTRO */
+const intro    = document.getElementById('intro');
+const introLine= document.getElementById('intro-line');
+const tapRing  = document.getElementById('tap-ring');
+const tapMsg   = document.getElementById('tap-msg');
+const arcFill  = document.getElementById('arc-fill');
+const main     = document.getElementById('main');
+
+const C = 2 * Math.PI * 43; // circumference ≈ 270
+const tapTexts = ['Keep going…', 'Almost…', 'One more…', 'I love you so much ❤️'];
+let taps = 0;
+
+setTimeout(() => introLine.classList.add('grow'), 350);
+
+function handleTap() {
+  if (taps >= 4) return;
+  if (taps === 0) tryPlay();
+  taps++;
+  arcFill.style.strokeDashoffset = C - (taps / 4) * C;
+  tapMsg.textContent = tapTexts[taps - 1];
+  if (taps === 4) {
+    setTimeout(() => {
+      intro.classList.add('hidden');
+      main.classList.add('visible');
+      sessionStorage.setItem('loadedOnce', '1');
+      scheduleLetterStart();
+    }, 1800);
+  }
+}
+
+tapRing.addEventListener('click', handleTap);
+tapRing.addEventListener('touchend', e => { e.preventDefault(); handleTap(); });
+
+if (sessionStorage.getItem('loadedOnce')) {
+  intro.style.display = 'none';
+  main.classList.add('visible');
+  tryPlay();
+  scheduleLetterStart();
+}
+
+/* TYPEWRITER */
+const letterEl  = document.getElementById('letter-text');
+const letterSig = document.getElementById('letter-sig');
+
+const lines = [
+  "Anagha,","",
+  "I've thought about how to say this a hundred times,",
+  "and every time, words feel too small.","",
+  "You aren't just someone I love —",
+  "you're the kind of person I didn't know existed.","",
+  "You can't fake anything.",
+  "Your smile isn't forced.",
+  "Your care isn't performative.",
+  "You just… are.","",
+  "And somehow that quiet, real version of you",
+  "became the most extraordinary thing in my world.","",
+  "You hide your pain like you don't want anyone to worry.",
+  "But I see it. And I'm here.","",
+  "I love the way you think.",
+  "I love the way you laugh.",
+  "I love that you feel unreal sometimes,",
+  "but are the most real person I know.","",
+  "Thank you for that late-night conversation",
+  "that never really ended.","",
+  "I love you, Anagha.",
+  "More than I'll ever fully say."
+];
+
+let letterStarted = false;
+
+function scheduleLetterStart() {
+  if (letterStarted) return;
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) { obs.disconnect(); if (!letterStarted) startLetter(); }
+  }, { threshold: 0.25 });
+  obs.observe(document.querySelector('.section-letter'));
+}
+
+function startLetter() {
+  letterStarted = true;
+  letterEl.innerHTML = '';
+
+  const cur = document.createElement('span');
+  cur.id = 'type-cursor';
+  cur.style.cssText = 'display:inline-block;width:1.5px;height:1em;background:var(--rose-bright);margin-left:2px;vertical-align:middle;animation:blink 0.85s infinite;';
+  letterEl.appendChild(cur);
+
+  let li = 0, ci = 0, lineEl = null;
+
+  function tick() {
+    if (li >= lines.length) { cur.remove(); letterSig.classList.add('show'); return; }
+    const line = lines[li];
+    if (ci === 0) {
+      lineEl = document.createElement('span');
+      lineEl.className = 'line';
+      if (line === '') {
+        lineEl.innerHTML = '&nbsp;';
+        lineEl.style.cssText = 'display:block;height:0.55em;';
+        letterEl.insertBefore(lineEl, cur);
+        li++; setTimeout(tick, 90); return;
+      }
+      letterEl.insertBefore(lineEl, cur);
+    }
+    if (ci < line.length) {
+      lineEl.textContent = line.slice(0, ci + 1);
+      ci++; setTimeout(tick, 36);
+    } else {
+      li++; ci = 0; setTimeout(tick, 230);
+    }
+  }
+  setTimeout(tick, 500);
+}
+
+/* SCROLL REVEAL */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* GALLERY TAP */
+document.querySelectorAll('.gallery-item').forEach(item => {
+  function toggle(e) { e.preventDefault(); item.classList.toggle('revealed'); }
+  item.addEventListener('touchend', toggle);
+  item.addEventListener('click', toggle);
+});
+
+/* RIPPLE */
+function spawnRipple(x, y) {
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  r.style.left = x + 'px'; r.style.top = y + 'px';
+  document.body.appendChild(r);
+  setTimeout(() => r.remove(), 900);
+}
+document.addEventListener('touchend', e => {
+  const t = e.changedTouches[0];
+  spawnRipple(t.clientX, t.clientY);
+});
+document.addEventListener('click', e => spawnRipple(e.clientX, e.clientY));
+
+/* PETALS */
+const petalSet = ['🌸','🌷','✿','❀','❤️','🩷'];
+function spawnPetal() {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = petalSet[Math.floor(Math.random() * petalSet.length)];
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.fontSize = (13 + Math.random() * 14) + 'px';
+  const d = 9 + Math.random() * 6;
+  p.style.animationDuration = d + 's';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), d * 1000 + 500);
+}
+setInterval(spawnPetal, 1600);
+</script>
+</body>
+</html>
